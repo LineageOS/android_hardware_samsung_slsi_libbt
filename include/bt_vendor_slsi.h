@@ -6,14 +6,10 @@
 #ifndef BT_VENDOR_SLSI_H__
 #define BT_VENDOR_SLSI_H__
 
-#ifndef CONFIG_SAMSUNG_SCSC_WIFIBT
-#error "CONFIG_SAMSUNG_SCSC_WIFIBT not defined"
-#endif
+#include <log/log.h>
 
-#include <cutils/log.h>
-
-#include "bt_types.h"
-#include "btm_api.h"
+//#include "bt_types.h"
+//#include "btm_api.h"
 
 #ifndef BTVENDOR_DBG
 #define BTVENDOR_DBG FALSE

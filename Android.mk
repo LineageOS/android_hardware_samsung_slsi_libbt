@@ -25,34 +25,27 @@ LOCAL_SRC_FILES := \
     src/bt_vendor_slsi.c
 
 LOCAL_C_INCLUDES += \
+    $(LOCAL_PATH)/include \
     $(BDROID_DIR)/hci/include \
     $(BDROID_DIR)/stack/include \
     $(BDROID_DIR)/include \
-    $(LOCAL_DIR)/include \
+    $(BDROID_DIR)/device/include \
     $(BDROID_DIR) \
-    $(LOCAL_DIR)/include \
-    $(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)
+    $(bdroid_C_INCLUDES)
 
 LOCAL_CFLAGS += $(bdroid_CFLAGS)
 
-ifneq ($(TARGET_BUILD_VARIANT),user)
-LOCAL_CFLAGS += -DBTVENDOR_DBG=TRUE
-endif
-
-ifeq ($(CONFIG_SAMSUNG_SCSC_WIFIBT),true)
-# Enable BT/WIFI related code changes in Android source files
-LOCAL_CFLAGS += -DCONFIG_SAMSUNG_SCSC_WIFIBT
-endif
-
 LOCAL_SHARED_LIBRARIES := \
-    libcutils
+    libcutils \
+    liblog
+
+LOCAL_HEADER_LIBRARIES := libutils_headers
 
 LOCAL_MODULE := libbt-vendor
 LOCAL_MODULE_OWNER := samsung
 LOCAL_MODULE_TAGS := optional
-
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
+LOCAL_PROPRIETARY_MODULE := true
 
 include $(BUILD_SHARED_LIBRARY)
 

@@ -9,6 +9,8 @@
 
 #define LOG_TAG "BT_VENDOR"
 
+#include <unistd.h>
+#include <stdio.h>
 #include <endian.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -19,25 +21,7 @@
 
 #include "bt_vendor_slsi.h"
 
-/**
- * SSB-5242 Route HCI I/F over ABD to driver on PC.
- */
-#ifndef ENABLE_HCI_TUNNELLING
-#define ENABLE_HCI_TUNNELLING FALSE
-#endif /* !ENABLE_HCI_TUNNELLING */
-#if defined(ENABLE_HCI_TUNNELLING) && (ENABLE_HCI_TUNNELLING == TRUE)
-#include <netinet/in.h>
-#include <netdb.h>
-#endif
-
 #define BLUETOOTH_ADDRESS_FILE "/sys/module/scsc_bt/parameters/bluetooth_address"
-
-/**
- * SSB-5242 Route HCI I/F over ABD to driver on PC.
- */
-#if defined(ENABLE_HCI_TUNNELLING) && (ENABLE_HCI_TUNNELLING == TRUE)
-static int hci_tunnelling_port_num = 10157;
-#endif
 
 static const bt_vendor_callbacks_t *vcb;
 static unsigned long long bt_addr;
@@ -81,69 +65,11 @@ static void set_bluetooth_address(unsigned long long value)
 /*
  * Internal interface
  */
-
-/**
- * SSB-5242 Route HCI I/F over ABD to driver on PC.
- */
-#if defined(ENABLE_HCI_TUNNELLING) && (ENABLE_HCI_TUNNELLING == TRUE)
-static int socket_open_client(int port_num)
-{
-    struct sockaddr_in serv_addr;
-    struct hostent *server;
-    int fd = -1;
-
-    BTVENDORI("HCI Tunnelling: socket_open_client(): port: 0x%08x.", port_num);
-
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (fd < 0)
-    {
-        BTVENDORE("HCI Tunnelling: socket_open_client(): error from socket(), errno:0x%08x:%s.", errno, strerror(errno));
-        fd = -1;
-        return fd;
-    }
-
-    BTVENDORI("HCI Tunnelling: socket_open_client(): port: 0x%08x, fd: 0x%08x.", port_num, fd);
-
-    server = gethostbyname("localhost");
-
-    if (server == NULL)
-    {
-        BTVENDORE("HCI Tunnelling: socket_open_client(): error from gethostbyname(), errno:0x%08x:%s, fd: 0x%08x.", errno, strerror(errno), fd);
-        fd = -1;
-        return fd;
-    }
-
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    bcopy((char *) server->h_addr, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
-    serv_addr.sin_port = htons(port_num);
-
-    if (connect(fd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-    {
-        BTVENDORE("HCI Tunnelling: socket_open_client(): error from connect(), errno:0x%08x:%s, fd: 0x%08x.", errno, strerror(errno), fd);
-        fd = -1;
-        return fd;
-    }
-
-    BTVENDORI("HCI Tunnelling: socket_open_client(): OK, fd:0x%08x.", fd);
-
-    return fd;
-}
-#endif
-
 static int hci_open(int *fds)
 {
     int h4_fd;
 
     BTVENDORI("HCI open");
-
-/**
- * SSB-5242 Route HCI I/F over ADB to driver on PC.
- */
-#if defined(ENABLE_HCI_TUNNELLING) && (ENABLE_HCI_TUNNELLING == TRUE)
-    h4_fd = socket_open_client(hci_tunnelling_port_num);
-#else
     if (bt_addr != 0)
     {
         set_bluetooth_address(bt_addr);
@@ -151,7 +77,7 @@ static int hci_open(int *fds)
 
     BTVENDORI("Opening h4 device %s", h4_file);
     h4_fd = open(h4_file, O_RDWR);
-#endif
+
     if (h4_fd == -1)
     {
         BTVENDORE("Open h4 device failed: %s (%d)", strerror(errno), errno);
