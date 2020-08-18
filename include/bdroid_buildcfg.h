@@ -17,7 +17,6 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME   "SLSI S5E7570"
 /**
  * SD-3510 Increase page timeout value when A2dp is streaming
  * During A2DP streaming, BT sometimes fails to connect
