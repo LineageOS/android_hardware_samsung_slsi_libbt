@@ -72,6 +72,5 @@
  * Ensure that A2DP data is scheduled in a way that suits the scheduling in Coex and BT-only scenarios
  */
 #define L2CAP_HIGH_PRI_MIN_XMIT_QUOTA       6
-#define MIN_NUMBER_A2DP_SDUS                3
 
 #endif
