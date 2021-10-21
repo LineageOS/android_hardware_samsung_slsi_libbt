@@ -19,7 +19,7 @@ else
   bdroid_CFLAGS := -DHAS_NO_BDROID_BUILDCFG
 endif
 
-BDROID_DIR := $(TOP_DIR)system/bt
+BDROID_DIR := $(TOP_DIR)packages/modules/Bluetooth/system
 
 LOCAL_SRC_FILES := \
     src/bt_vendor_slsi.c
