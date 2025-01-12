@@ -1,0 +1,54 @@
+
+soong_namespace {}
+
+bootstrap_go_package {
+    name: "soong-libbt-vendor",
+    pkgPath: "android/soong/libbt_vendor",
+    deps: [
+        "blueprint",
+        "blueprint-pathtools",
+        "soong",
+        "soong-android",
+        "soong-cc",
+    ],
+    srcs: [
+        "libbt_vendor.go",
+    ],
+    pluginFor: ["soong_build"],
+}
+
+libbt_vendor_defaults {
+    name: "libbt_vendor_defaults",
+}
+
+cc_library_shared {
+    name: "libbt-vendor",
+    owner: "samsung",
+    defaults: [
+        "libbt_vendor_defaults",
+    ],
+    export_include_dirs: [
+        "conf",
+        "include",
+    ],
+    srcs: [
+        "src/bt_vendor_slsi.c",
+    ],
+    include_dirs: [
+        "packages/modules/Bluetooth/system/hci/include",
+    ],
+    shared_libs: [
+        "libcutils",
+        "liblog",
+    ],
+    compile_multilib: "both",
+    soc_specific: true,
+    proprietary: true,
+    product_variables: {
+        debuggable: {
+            cflags: [
+                "-DBTVENDOR_DBG=TRUE",
+            ],
+        },
+    },
+}
