@@ -1,0 +1,25 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "bt_did.conf",
+    src: "bt_did.conf",
+    sub_dir: "bluetooth",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "bt_vendor.conf",
+    src: "bt_vendor.conf",
+    sub_dir: "bluetooth",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "bt_vendor_hammerhead_scsc.conf",
+    src: "bt_vendor_hammerhead_scsc.conf",
+    sub_dir: "bluetooth",
+    vendor: true,
+}
