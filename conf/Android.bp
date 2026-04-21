@@ -1,0 +1,12 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "bt_did.slsi.conf",
+    src: "bt_did.conf",
+    filename: "bt_did.conf",
+    sub_dir: "bluetooth",
+    vendor: true,
+}
